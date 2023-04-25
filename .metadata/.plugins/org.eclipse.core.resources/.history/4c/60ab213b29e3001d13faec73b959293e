@@ -1,0 +1,5 @@
+package io.javabrains.springsecurityjwt.rest;
+
+public class HelloController {
+
+}

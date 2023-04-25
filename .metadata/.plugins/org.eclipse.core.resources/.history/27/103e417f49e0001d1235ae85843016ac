@@ -1,0 +1,10 @@
+package com.spring.model;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name="STUDENT_COURSE")
+public class Student {
+
+}

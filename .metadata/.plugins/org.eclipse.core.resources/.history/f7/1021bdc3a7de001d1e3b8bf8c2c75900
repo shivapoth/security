@@ -1,0 +1,57 @@
+package com.spring.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.SecurityFilterChain;
+
+@Configuration
+@EnableWebSecurity
+@EnableMethodSecurity
+public class SecurityConfig {
+
+	@Bean
+	// 1) Authentication
+	public UserDetailsService configAuthentication() throws Exception {
+
+		UserDetails user1 = User.withUsername("student").password(encoder().encode("student")).authorities("STUDENT")
+				.build();
+
+		UserDetails user2 = User.withUsername("admin").password(encoder().encode("admin")).authorities("ADMIN").build();
+
+		UserDetails user3 = User.withUsername("employee").password(encoder().encode("employee")).authorities("EMPLOYEE")
+				.build();
+
+		UserDetails u = User.withUsername("st").password(encoder().encode("st")).roles("ADMIN").build();
+
+		return new InMemoryUserDetailsManager(user1, user2, user3, u);
+
+	}
+
+	@Bean
+	// 2)Authorization
+	public SecurityFilterChain configAuthorization(HttpSecurity http) throws Exception {
+
+		http.authorizeHttpRequests(re -> re.antMatchers("/h").permitAll().antMatchers("/w").authenticated()
+				.antMatchers("/a").hasAnyAuthority("ADMIN").antMatchers("/e").hasAnyAuthority("EMPLOYEE")
+				.antMatchers("/s").hasAnyAuthority("STUDENT").anyRequest().authenticated())
+				.formLogin(form -> form.loginPage("/login").permitAll()).logout(logout -> logout.permitAll());
+
+		return null;
+
+	}
+
+	@Bean
+	public PasswordEncoder encoder() {
+		return new BCryptPasswordEncoder();
+	}
+
+}

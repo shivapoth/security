@@ -1,0 +1,25 @@
+package com.javaintegeration.modelDto;
+
+import java.sql.Date;
+
+import com.javaintegeration.entity.User;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class EducationDto {
+	private String id;
+	private String degree;
+	private String collageName;
+	private String specialization;
+	private int duration;
+	private Date  jDate;
+	private  Date  cDate; 
+	private  double perct;
+	private User user;
+
+}

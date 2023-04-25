@@ -1,0 +1,73 @@
+package com.javaintegeration.service.imp;
+
+import java.util.List;
+import java.util.Random;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import com.javaintegeration.entity.User;
+import com.javaintegeration.exception.UserNotFound;
+import com.javaintegeration.modelDto.UserDto;
+import com.javaintegeration.repository.UserRepository;
+import com.javaintegeration.service.UserService;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+@Service
+public class UserServiceImp implements UserService {
+	@Autowired
+	private UserRepository userRepository;
+	@Autowired
+	private ModelMapper mapper;
+	@Autowired
+	private PasswordEncoder encoder;
+   
+	@Override
+	public UserDto addUser(UserDto user) {
+		Random random= new Random();
+//		String data=user.getFullName().substring(0, 2)+""+
+	      user.setId(UUID.randomUUID().toString() );
+		user.setFullName(user.getFname()+" "+user.getmName()+" "+" "+user.getlName());
+		user.setPassword(encoder.encode(user.getPassword()));
+		User save = userRepository.save(mapper.map(user, User.class));
+		return mapper.map(save, UserDto.class);
+	}
+
+	@Override
+	public UserDto getUserById(String id) {
+		User user = userRepository.findById(id).orElseThrow(() -> new UserNotFound(" invalid user "));
+		return mapper.map(user, UserDto.class);
+	}
+
+	@Override
+	public List<UserDto> getAllUser() {
+		List<User> findAll = userRepository.findAll();
+		List<UserDto> collect = findAll.stream().map((user) -> this.mapper.map(user, UserDto.class))
+				.collect(Collectors.toList());
+		return collect;
+	}
+
+	@Override
+	public UserDto updateUser(String id, UserDto user) {
+		User user1 = userRepository.findById(id).orElseThrow(() -> new UserNotFound("Invalid user "));
+		user1.setFname(user.getFname());
+		user1.setEmail(user.getEmail());
+		user1.setFullName(user.getFname()+" "+user.getmName()+" "+" "+user.getlName());
+		user1.setlName(user.getlName());
+		user1.setmName(user.getmName());
+		
+UserDto map = mapper.map(user1, UserDto.class);
+		return map;
+	}
+
+	@Override
+	public void deleteUserDetails(String id) {
+
+		userRepository.deleteById(id);
+		// TODO Auto-generated method stub
+
+	}
+
+}

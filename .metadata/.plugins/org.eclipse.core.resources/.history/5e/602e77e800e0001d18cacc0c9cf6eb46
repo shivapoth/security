@@ -1,0 +1,81 @@
+package com.javaintegeration.service.imp;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import com.javaintegeration.entity.Education;
+import com.javaintegeration.entity.User;
+import com.javaintegeration.exception.UserNotFound;
+import com.javaintegeration.modelDto.EducationDto;
+import com.javaintegeration.repository.EducationRepository;
+import com.javaintegeration.repository.UserRepository;
+import com.javaintegeration.service.EducationService;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+@Service
+public class EducationServiceImp implements EducationService {
+
+	@Autowired
+	private EducationRepository educationRepository;
+
+	@Autowired
+	private ModelMapper mapper;
+	@Autowired
+	private UserRepository repository;
+
+	@Override
+	public EducationDto addEducation(EducationDto education,String id) {
+      education.setId(UUID.randomUUID().toString());
+	  User user = repository.findById(id).get();
+	education.setUser(user);
+		Education save = educationRepository.save(mapper.map(education, Education.class));
+
+		return mapper.map(save, EducationDto.class);
+	}
+
+	@Override
+	public EducationDto getEducationById(String id) {
+
+		Education education = educationRepository.findById(id).orElseThrow(() -> new UserNotFound("invalid user"));
+
+		return mapper.map(education, EducationDto.class);
+	}
+
+	@Override
+	public List<EducationDto> getAllEducation() {
+
+		List<Education> findAll = educationRepository.findAll();
+		List<EducationDto> collect = findAll.stream().map((education) -> this.mapper.map(findAll, EducationDto.class))
+				.collect(Collectors.toList());
+		return collect;
+	}
+
+	@Override
+	public EducationDto updateEducation(String id, EducationDto education) {
+
+		Education edu = educationRepository.findById(id).orElseThrow(() -> new UserNotFound("Invalid user"));
+
+		edu.setCollageName(education.getCollageName());
+		edu.setCDate(education.getCDate());
+		edu.setDegree(education.getDegree());
+		edu.setDuration(education.getDuration());
+		edu.setPerct(education.getPerct());
+		edu.setSpecialization(education.getSpecialization());
+		edu.setJDate(education.getJDate());
+
+		EducationDto map = mapper.map(edu, EducationDto.class);
+		return map;
+	}
+
+	@Override
+	public void deleteEducationDetails(String id) {
+		educationRepository.deleteById(id);
+		// TODO Auto-generated method stub
+
+	}
+
+}

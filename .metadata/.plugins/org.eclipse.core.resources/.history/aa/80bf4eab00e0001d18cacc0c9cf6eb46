@@ -1,0 +1,30 @@
+package com.javaintegeration.entity;
+
+import java.sql.Date;
+
+import org.hibernate.annotations.ManyToAny;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotEmpty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+public class Education {
+	@Id
+private String id;
+@NotEmpty(message =" cannot be empty ")
+private String degree;
+private String collageName;
+private String specialization;
+private int duration;
+private Date  jDate;
+private  Date  cDate; 
+private  double perct;
+
+}

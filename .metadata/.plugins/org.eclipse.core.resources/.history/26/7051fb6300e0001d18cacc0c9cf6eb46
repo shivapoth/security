@@ -1,0 +1,16 @@
+package com.javaintegeration.modelDto;
+
+import com.javaintegeration.entity.User;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class PostDto {
+	private String id;
+	 private String post;
+	 private String description;
+	 private User user;
+}

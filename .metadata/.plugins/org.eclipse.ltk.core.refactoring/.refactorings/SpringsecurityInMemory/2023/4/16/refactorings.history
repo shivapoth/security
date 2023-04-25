@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename resource &apos;SpringsecurityInMemory/src/main/resources/templates/Employee.html&apos; to &apos;employee.html&apos;" description="Rename resource &apos;Employee.html&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src/main/resources/templates/Employee.html" name="employee.html" stamp="1681879568986" updateReferences="true"/>
+</session>
